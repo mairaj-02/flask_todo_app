@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}My To-Do List{% endblock %}
+
+{% block content %}
+<div class="todo-container">
+    <h2>
+        Welcome, {{ session.username }}!
+    </h2>
+        <h3>Your To-Do List</h3>
+        <ul class="todo-list">
+            <li>Task 1</li>
+            <li>Task 2</li>
+            <li>Task 3</li>
+        </ul>
+</div>
+{% endblock %}
