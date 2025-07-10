@@ -1,6 +1,7 @@
 import sqlite3
 import bcrypt
 
+# Creating the database using some flask syntax
 def init_db():
     try:
         conn = sqlite3.connect('todo.db')
@@ -19,27 +20,30 @@ def init_db():
         if conn:
             conn.close()
 
+# Registering a user
 def register_user(name, password):
     try:
         if not password.strip():
-            return False, "Password cannot be empty."
+            return False, "Password cannot be empty." # check if password is empty
         
         conn = sqlite3.connect('todo.db')    
         cursor = conn.cursor()
-        cursor.execute("SELECT username FROM users WHERE username = ?", (name,))
+        cursor.execute("SELECT username FROM users WHERE username = ?", (name,)) # Checks so that the username doesn't exist already and registers
         if cursor.fetchone():
             return False, "Username already exists, choose a new name."
         
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        cursor.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", (name, hashed_password))
+        cursor.execute("INSERT INTO users (username, password_hash) VALUES (?, ?)", (name, hashed_password)) # stores the hashed password for the respective user
         conn.commit()
         conn.close()
         return True, "User registered successfully!"
+    
     except sqlite3.Error as e:
         return False, f"Error registering user: {e}"
     except Exception as e:
         return False, f"General Error: {e}"
 
+# Verifying a user exists and logging them in
 def verify_user(name, password):
     conn = sqlite3.connect('todo.db')
     cursor = conn.cursor()
