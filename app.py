@@ -25,7 +25,6 @@ def login():
             return redirect(url_for('todo_list')) # if they are verified then they are redirected to the todo page
         else:
             flash(message)
-            return redirect(url_for('home'))
     return render_template('login.html')
     
 

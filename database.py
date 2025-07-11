@@ -58,7 +58,7 @@ def verify_user(name, password):
             if bcrypt.checkpw(password.encode('utf-8'), user[0]):
                 return True, "Login successful!"
             else:
-                return False, "Invalid password, check your password and try again."
+                return False, "Invalid credentials, please check again or register first."
         else:
             return False, "Username not found, please register first."
     finally:
