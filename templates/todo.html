@@ -3,15 +3,40 @@
 {% block title %}My To-Do List{% endblock %}
 
 {% block content %}
-<div class="todo-container">
-    <h2>
-        Welcome, {{ session.username }}!
-    </h2>
+    <div class="todo-container">
+        <h2>Welcome, {{ session['username'] }}!</h2>
         <h3>Your To-Do List</h3>
+
+        <form action="{{ url_for('add_task') }}" method="post" class="todo-form">
+            <div class="form-group">
+                <label for="task">Task:</label>
+                <input type="text" id="task" name="task" placeholder="Add a task" required>
+            </div>
+
+            <div class="form-group">
+                <label for="due_date">Due Date (dd/mm/yyyy):</label>
+                <input type="date" id="due_date" name="due_date" required>
+            </div>
+            <button type="submit" class="btn-add">Add Task</button>
+        </form>
+
         <ul class="todo-list">
-            <li>Task 1</li>
-            <li>Task 2</li>
-            <li>Task 3</li>
+            {% for task in tasks %}
+                <li>
+                    <form action="{{ url_for('update_task')}}" method="post" style="display: inline;">
+                        <input type="hidden" name="task" value="{{ task[0] }}">
+                        <input type="text" name="task" value="{{ task[0] }}" required>
+                        <input type="text" name="due_date" value="{{ task[1] }}" required>
+                        <input type="checkbox" name="done" {% if task[2] %}checked{% endif %}>
+                        <button type="submit" class="btn-update">Update</button>
+                    </form>
+
+                    <form action="{{ url_for('remove_task') }}" method="post" style="display: inline;">
+                        <input type="hidden" name="task" value="{{ task[0] }}">
+                        <button type="submit" class="btn-remove">Remove</button>
+                    </form>
+                </li>
+            {% endfor %}
         </ul>
-</div>
+    </div>
 {% endblock %}
