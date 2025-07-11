@@ -26,25 +26,15 @@ def login():
         else:
             flash(message)
     return render_template('login.html')
-     
-@app.route('/signin')
-def signin():
-    return render_template('login.html') # tbh I have no idea about this, might need to refactor
     
 
+# register route which uses POST to register a user
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-        if not password.strip():
-            flash('Password cannot be empty.')
-            return render_template('register.html')
-
-        if len(password) < 8 or not any(char.isdigit() for char in password):
-            flash('Password must be at least 8 characters long and contain at least 1 digit.')
-            return render_template('register.html')
 
         success, message = database.register_user(username, password)
         flash(message)

@@ -26,6 +26,9 @@ def register_user(name, password):
         if not password.strip():
             return False, "Password cannot be empty." # check if password is empty
         
+        if len(password) < 8 or not any(char.isdigit() for char in password):
+            return False, 'Password must be at least 8 characters long and contain at least 1 digit.' # makes sure the password is strong
+        
         conn = sqlite3.connect('todo.db')    
         cursor = conn.cursor()
         cursor.execute("SELECT username FROM users WHERE username = ?", (name,)) # Checks so that the username doesn't exist already and registers
