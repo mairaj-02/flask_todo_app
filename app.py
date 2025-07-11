@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 import database
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 database.init_db() # Initialize the database
 
@@ -18,13 +18,14 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        success, message = database.verify_user(username, password)
+        success, message = database.verify_user(username, password)                                                                                 
 
         if success:
             session['username'] = username
             return redirect(url_for('todo_list')) # if they are verified then they are redirected to the todo page
         else:
             flash(message)
+            return redirect(url_for('home'))
     return render_template('login.html')
     
 
