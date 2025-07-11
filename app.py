@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 import database
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key_here'
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 
 database.init_db() # Initialize the database
 
@@ -18,33 +18,24 @@ def login():
         username = request.form['username']
         password = request.form['password']
 
-        success, message = database.verify_user(username, password)
+        success, message = database.verify_user(username, password)                                                                                 
 
         if success:
             session['username'] = username
             return redirect(url_for('todo_list')) # if they are verified then they are redirected to the todo page
         else:
             flash(message)
+            return redirect(url_for('home'))
     return render_template('login.html')
-     
-@app.route('/signin')
-def signin():
-    return render_template('login.html') # tbh I have no idea about this, might need to refactor
     
 
+# register route which uses POST to register a user
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-        if not password.strip():
-            flash('Password cannot be empty.')
-            return render_template('register.html')
-
-        if len(password) < 8 or not any(char.isdigit() for char in password):
-            flash('Password must be at least 8 characters long and contain at least 1 digit.')
-            return render_template('register.html')
 
         success, message = database.register_user(username, password)
         flash(message)
